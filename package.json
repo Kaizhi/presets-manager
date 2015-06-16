@@ -19,7 +19,8 @@
   "dependencies": {
     "normalize.css": "^3.0.3",
     "react-dropzone": "^1.2.0",
-    "react-router": "^0.13.3"
+    "react-router": "^0.13.3",
+    "unzip2": "^0.2.5"
   },
   "devDependencies": {
     "browserify": "^10.1.3",
