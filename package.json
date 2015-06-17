@@ -17,7 +17,9 @@
   },
   "homepage": "https://github.com/Kaizhi/presets-manager",
   "dependencies": {
+    "mkdirp": "^0.5.1",
     "normalize.css": "^3.0.3",
+    "osenv": "^0.1.2",
     "react-dropzone": "^1.2.0",
     "react-router": "^0.13.3",
     "unzip2": "^0.2.5"
