@@ -17,8 +17,8 @@ var Install = React.createClass({
 
 		if (os.platform() === 'darwin') { //OSX
 			presetsPath = path.join(osenv.home(), '/Library/Application Support/Adobe/Lightroom/Develop Presets');
-		} else {
-			presetsPath = '';
+		} else if (os.platform() === 'win32') {
+			presetsPath = path.join(osenv.home(), path.normalize('/AppData/Roaming/Adobe/Lightroom/Develop Presets'));
 		}
 		return {
 			presetsPath: presetsPath
