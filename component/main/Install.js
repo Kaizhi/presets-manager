@@ -2,6 +2,7 @@ var React = require( 'react' );
 var Router = require('react-router');
 var RouteHandler = Router.RouteHandler;
 var Dropzone = require('react-dropzone');
+var PresetItems = require( './PresetItems.js' );
 
 var unzip = window.require('unzip2');
 var fs = window.require('fs');
@@ -12,6 +13,14 @@ var mkdirp = window.require('mkdirp');
 
 var Install = React.createClass({
 	displayName: 'Install',
+	statics: {
+		getDirectories: function (src) {
+			return fs.readdirSync(src).filter(function(file) {
+				return fs.statSync(path.join(src, file)).isDirectory();
+			});
+		}
+	},
+
 	getDefaultProps: function () {
 		var presetsPath;
 
@@ -21,12 +30,14 @@ var Install = React.createClass({
 			presetsPath = path.join(osenv.home(), path.normalize('/AppData/Roaming/Adobe/Lightroom/Develop Presets'));
 		}
 		return {
-			presetsPath: presetsPath
+			presetsPath: presetsPath,
+			presetsList: this.getDirectories(presetsPath)
 		};
 	},
+
 	componentDidMount: function () {
-		console.log(osenv.tmpdir(), this.props);
 	},
+
 	onDrop: function (files) {
 		var component = this,
 			baseName;
@@ -54,10 +65,11 @@ var Install = React.createClass({
 			});
 		});
 	},
+
 	render: function() {
 		return (
-	    	<Dropzone onDrop={this.onDrop} style={{}}>
-	        	<div>Try dropping some files here, or click to select files to upload.</div>
+	    	<Dropzone onDrop={this.onDrop} supportClick={false} style={{}}>
+	        	<PresetItems presetsList={this.props.presetsList} presetsPath={this.props.presetsPath}/>
 	      	</Dropzone>
 		);
 	}

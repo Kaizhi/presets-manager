@@ -1,4 +1,6 @@
 @sidebar-width: 76px;
+@orange: #e74c3c;
+@blue: #262e3b;
 
 html, body, body > div {
 	width: 100%;
@@ -30,6 +32,7 @@ aside {
 	background-color: #262e3b;
 	height: 100%;
 	float: left;
+	position: fixed;
 
 	ul li {
 		height: 50px;
@@ -81,11 +84,48 @@ div.content {
 	.dropzone {
 		width: 100%;
 		height: 100%;
-		padding: 30px;
 		text-align: center;
 
 		&.active {
 			background-color: red;
+		}
+	}
+
+	.presets-list {
+		width: 100%;
+		height: 100%;
+
+		li {
+			text-align: left;
+			padding: 15px 40px 15px 15px;
+			width: 100%;
+			transition: background-color .2s ease-out, opacity .2s ease-out;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			position: relative;
+
+			.actions {
+				opacity: 0;
+				position: absolute;
+				z-index: 1;
+				right: 15px;
+				top: 15px;
+				cursor: pointer;
+				color: @orange;
+			}
+		}
+
+		li:nth-child(odd) {
+			background-color: #F0F0F0;
+		}
+
+		li:hover {
+			background-color: silver;
+
+			.actions {
+				opacity: 1;
+			}
 		}
 	}
 }
