@@ -35,7 +35,22 @@ var Install = React.createClass({
 		};
 	},
 
+	getInitialState: function () {
+		return {
+			presetsList: this.props.presetsList.sort() || []
+		};
+	},
+
 	componentDidMount: function () {
+	},
+
+	updateList: function (item) {
+		var presetsList = this.state.presetsList;
+		presetsList.push(item);
+
+		this.setState({
+			presetsList: presetsList.sort()
+		});
 	},
 
 	onDrop: function (files) {
@@ -50,13 +65,17 @@ var Install = React.createClass({
 			.on('entry', function (entry) {
 				// If this is a lrtemplate file, we can copy it to the right directory
 				if (path.extname(entry.path) === '.lrtemplate') {
+
 					// Create the subdirectory under the lightroom develop presets dir if it doesn't exist
 					mkdirp(path.join(component.props.presetsPath, baseName), function (err) {
 						if (err) {
 							return; //handle error
 						} else {
+							if (component.state.presetsList.indexOf(baseName) === -1) {
+								component.updateList(baseName);
+							}
 							// Extract lrtemplate files to the directory
-							entry.pipe(fs.createWriteStream(path.join(component.props.presetsPath, baseName, entry.path)));
+							entry.pipe(fs.createWriteStream(path.join(component.props.presetsPath, baseName, entry.path))							);
 						}
 					});
 				} else {
@@ -69,7 +88,7 @@ var Install = React.createClass({
 	render: function() {
 		return (
 	    	<Dropzone onDrop={this.onDrop} supportClick={false} style={{}}>
-	        	<PresetItems presetsList={this.props.presetsList} presetsPath={this.props.presetsPath}/>
+	        	<PresetItems presetsList={this.state.presetsList} presetsPath={this.props.presetsPath}/>
 	      	</Dropzone>
 		);
 	}

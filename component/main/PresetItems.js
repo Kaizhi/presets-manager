@@ -3,19 +3,21 @@ var fs = window.require('fs');
 var path = window.require('path');
 
 var PresetItems = React.createClass({
-	deleteFolderRecursive: function (path) {
-		if( fs.existsSync(path) ) {
-			fs.readdirSync(path).forEach(function(file,index){
-				var curPath = path + "/" + file;
-				if (fs.lstatSync(curPath).isDirectory()) { // recurse
-					deleteFolderRecursive(curPath);
-				} else { // delete file
-					fs.unlinkSync(curPath);
-				}
-			});
+	statics: {
+		deleteFolderRecursive: function (path) {
+			if( fs.existsSync(path) ) {
+				fs.readdirSync(path).forEach(function(file,index){
+					var curPath = path + "/" + file;
+					if (fs.lstatSync(curPath).isDirectory()) { // recurse
+						deleteFolderRecursive(curPath);
+					} else { // delete file
+						fs.unlinkSync(curPath);
+					}
+				});
 
-			fs.rmdirSync(path);
-		}
+				fs.rmdirSync(path);
+			}
+		},
 	},
 
 	getInitialState: function () {
@@ -33,7 +35,7 @@ var PresetItems = React.createClass({
 			itemIndex = evt.target.parentNode.dataset.presetindex;
 
 		console.log('deleting ', path.join(this.props.presetsPath, list[itemIndex]));
-		this.deleteFolderRecursive(path.join(this.props.presetsPath, list[itemIndex]));
+		this.constructor.deleteFolderRecursive(path.join(this.props.presetsPath, list[itemIndex]));
 		list.splice(itemIndex, 1);
 
 		this.setState({
