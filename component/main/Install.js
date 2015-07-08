@@ -89,6 +89,12 @@ var Install = React.createClass({
 		return (
 	    	<Dropzone onDrop={this.onDrop} supportClick={false} style={{}}>
 	        	<PresetItems presetsList={this.state.presetsList} presetsPath={this.props.presetsPath}/>
+
+	        	<div className="overlay">
+	        		<div className="modal">
+	        			<span>Let go! Your presets will be automatically installed.</span>
+	        		</div>
+	        	</div>
 	      	</Dropzone>
 		);
 	}

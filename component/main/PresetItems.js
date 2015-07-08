@@ -26,10 +26,14 @@ var PresetItems = React.createClass({
 		};
 	},
 
-	deletePreset: function (evt) {
-		if (!evt.target.classList.contains('fa')) {
+	onClick: function (evt) {
+		if (evt.target.classList.contains('fa')) {
+			this.deletePreset(evt);
 			return;
 		}
+	},
+
+	deletePreset: function (evt) {
 
 		var list = this.state.presetsList,
 			itemIndex = evt.target.parentNode.dataset.presetindex;
@@ -51,7 +55,7 @@ var PresetItems = React.createClass({
 				</li>
 			);
 		};
-		return <ul onClick={this.deletePreset} className="presets-list">{this.state.presetsList.map(item)}</ul>;
+		return <ul onClick={this.onClick} className="presets-list">{this.state.presetsList.map(item)}</ul>;
 	}
 });
 
