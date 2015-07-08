@@ -1,6 +1,7 @@
 var React = require( 'react' );
 var fs = window.require('fs');
 var path = window.require('path');
+var PresetItem = require( './PresetItem.js' );
 
 var PresetItems = React.createClass({
 	statics: {
@@ -26,17 +27,9 @@ var PresetItems = React.createClass({
 		};
 	},
 
-	onClick: function (evt) {
-		if (evt.target.classList.contains('fa')) {
-			this.deletePreset(evt);
-			return;
-		}
-	},
+	deletePreset: function (itemIndex) {
 
-	deletePreset: function (evt) {
-
-		var list = this.state.presetsList,
-			itemIndex = evt.target.parentNode.dataset.presetindex;
+		var list = this.state.presetsList
 
 		this.constructor.deleteFolderRecursive(path.join(this.props.presetsPath, list[itemIndex]));
 		list.splice(itemIndex, 1);
@@ -47,15 +40,14 @@ var PresetItems = React.createClass({
 	},
 
 	render: function() {
+		var component = this;
+
 		function item(itemText, index) {
 			return (
-				<li key={index}>
-					{itemText}
-					<span className="actions" data-presetindex={index}><i className="fa fa-trash-o"></i></span>
-				</li>
+				<PresetItem key={index + itemText} deletePreset={component.deletePreset.bind(component, index)} index={index} itemText={itemText}/>
 			);
 		};
-		return <ul onClick={this.onClick} className="presets-list">{this.state.presetsList.map(item)}</ul>;
+		return <ul className="presets-list">{this.state.presetsList.map(item)}</ul>;
 	}
 });
 

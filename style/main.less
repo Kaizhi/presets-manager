@@ -101,6 +101,7 @@ div.content {
 			background-color: rgba(255, 255, 255, 0.5);
 			position: absolute;
 			transition: opacity .2s ease-out;
+			pointer-events: none;
 
 			.modal {
 				width: 100%;
@@ -147,6 +148,56 @@ div.content {
 				top: 15px;
 				cursor: pointer;
 				color: @orange;
+
+				.fa {
+					font-size: 1.5em;
+					margin-top: -5px;
+				}
+			}
+
+			&.deleting {
+				.confirm-delete {
+					pointer-events: inherit;
+					opacity: 1;
+				}
+			}
+
+			.confirm-delete {
+				transition: opacity .2s ease-out;
+				pointer-events: none;
+				opacity: 0;
+				position: absolute;
+				background-color: @orange;
+				color: white;
+				left: 0;
+				right: 0;
+				top: 0;
+				bottom: 0;
+				padding: 0 15px;
+				z-index: 5;
+
+				p {
+					margin: 0;
+					float: left;
+					line-height: 45px;
+				}
+
+				button {
+					float: right;
+					margin-right: 10px;
+					background-color: transparent;
+					border-radius: 3px;
+					border: 0;
+					box-shadow: 0;
+					border: 1px solid white;
+					box-sizing: border-box;
+					padding: 5px 10px;
+					margin-top: 8px;
+
+					&:first-of-type {
+						margin-right: 0px;
+					}
+				}
 			}
 		}
 
