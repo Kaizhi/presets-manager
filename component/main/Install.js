@@ -3,6 +3,7 @@ var Router = require('react-router');
 var RouteHandler = Router.RouteHandler;
 var Dropzone = require('react-dropzone');
 var PresetItems = require( './PresetItems.js' );
+var Footer = require('./Footer.js');
 
 var unzip = window.require('unzip2');
 var fs = window.require('fs');
@@ -106,15 +107,18 @@ var Install = React.createClass({
 
 	render: function() {
 		return (
-	    	<Dropzone onDrop={this.onDrop} supportClick={false} style={{}}>
-	        	<PresetItems presetsList={this.state.presetsList} presetsPath={this.props.presetsPath}/>
+			<div>
+		    	<Dropzone onDrop={this.onDrop} supportClick={false} style={{}}>
+		        	<PresetItems presetsList={this.state.presetsList} presetsPath={this.props.presetsPath}/>
 
-	        	<div className="overlay">
-	        		<div className="modal">
-	        			<span>Let go! Your presets will be automatically installed.</span>
-	        		</div>
-	        	</div>
-	      	</Dropzone>
+		        	<div className="overlay">
+		        		<div className="modal">
+		        			<span>Let go! Your presets will be automatically installed.</span>
+		        		</div>
+		        	</div>
+		      	</Dropzone>
+		      	<Footer/>
+	      	</div>
 		);
 	}
 });
