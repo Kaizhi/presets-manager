@@ -15,8 +15,15 @@ var Install = React.createClass({
 	displayName: 'Install',
 	statics: {
 		getDirectories: function (src) {
-			return fs.readdirSync(src).filter(function(file) {
-				return fs.statSync(path.join(src, file)).isDirectory();
+			return fs.readdirSync(src).map(function(file) {
+				if (fs.statSync(path.join(src, file)).isDirectory()) {
+					return {
+						name: file,
+						items: fs.readdirSync(path.join(src, file))
+					};
+				}
+			}).filter(function (item) {
+				return item !== undefined;
 			});
 		}
 	},
@@ -41,15 +48,18 @@ var Install = React.createClass({
 		};
 	},
 
-	componentDidMount: function () {
-	},
-
 	updateList: function (item) {
-		var presetsList = this.state.presetsList;
+		var presetsList = this.state.presetsList,
+			sortFn = function(a, b){
+				if (a.name < b.name) return -1;
+				if (a.name > b.name) return 1;
+				return 0;
+			};
+
 		presetsList.push(item);
 
 		this.setState({
-			presetsList: presetsList.sort()
+			presetsList: presetsList.sort(sortFn)
 		});
 	},
 
@@ -61,25 +71,34 @@ var Install = React.createClass({
 			// Get the name of the subdirectory that we will unzip the files to
 			baseName = path.basename(file.path, '.zip');
 
-			fs.createReadStream(file.path).pipe(unzip.Parse())
-			.on('entry', function (entry) {
+			var items = [],
+				reader = fs.createReadStream(file.path).pipe(unzip.Parse());
+
+			reader.on('entry', function (entry) {
 				// If this is a lrtemplate file, we can copy it to the right directory
 				if (path.extname(entry.path) === '.lrtemplate') {
-
+					items.push(entry.path);
 					// Create the subdirectory under the lightroom develop presets dir if it doesn't exist
 					mkdirp(path.join(component.props.presetsPath, baseName), function (err) {
 						if (err) {
 							return; //handle error
 						} else {
-							if (component.state.presetsList.indexOf(baseName) === -1) {
-								component.updateList(baseName);
-							}
 							// Extract lrtemplate files to the directory
-							entry.pipe(fs.createWriteStream(path.join(component.props.presetsPath, baseName, entry.path))							);
+							entry.pipe(fs.createWriteStream(path.join(component.props.presetsPath, baseName, entry.path)));
 						}
 					});
 				} else {
 				    entry.autodrain();
+				}
+			});
+
+			// Handle unzip finished actions
+			reader.on('close', function () {
+				if (component.state.presetsList.indexOf(baseName) === -1) {
+					component.updateList({
+						name: baseName,
+						items: items
+					});
 				}
 			});
 		});

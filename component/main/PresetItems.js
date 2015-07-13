@@ -31,7 +31,7 @@ var PresetItems = React.createClass({
 
 		var list = this.state.presetsList
 
-		this.constructor.deleteFolderRecursive(path.join(this.props.presetsPath, list[itemIndex]));
+		this.constructor.deleteFolderRecursive(path.join(this.props.presetsPath, list[itemIndex].name));
 		list.splice(itemIndex, 1);
 
 		this.setState({
@@ -42,9 +42,9 @@ var PresetItems = React.createClass({
 	render: function() {
 		var component = this;
 
-		function item(itemText, index) {
+		function item(item, index) {
 			return (
-				<PresetItem key={index + itemText} deletePreset={component.deletePreset.bind(component, index)} index={index} itemText={itemText}/>
+				<PresetItem key={index + item.name} deletePreset={component.deletePreset.bind(component, index)} index={index} itemText={item.name}/>
 			);
 		};
 		return <ul className="presets-list">{this.state.presetsList.map(item)}</ul>;
