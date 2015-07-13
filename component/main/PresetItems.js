@@ -44,7 +44,7 @@ var PresetItems = React.createClass({
 
 		function item(item, index) {
 			return (
-				<PresetItem key={index + item.name} deletePreset={component.deletePreset.bind(component, index)} index={index} itemText={item.name}/>
+				<PresetItem key={index + item.name} items={item.items} deletePreset={component.deletePreset.bind(component, index)} index={index} itemText={item.name}/>
 			);
 		};
 		return <ul className="presets-list">{this.state.presetsList.map(item)}</ul>;
