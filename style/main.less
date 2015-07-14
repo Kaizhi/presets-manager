@@ -86,12 +86,29 @@ footer {
 	position: fixed;
 	bottom: 0;
 
-	ul {
-		float: right;
+	.actions {
+
+		&.primary {
+			float: left;
+
+			li {
+				margin-left: 0px;
+				margin-right: 20px;
+			}
+		}
+
+		&.secondary {
+			float: right;
+		}
 
 		li {
 			margin-left: 20px;
 			float: left;
+
+			span {
+				cursor: pointer;
+			}
+
 			.fa {
 				color: #95989d;
 

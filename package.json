@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Kaizhi/presets-manager",
   "dependencies": {
+    "menubar": "^2.0.16",
     "mkdirp": "^0.5.1",
     "normalize.css": "^3.0.3",
     "osenv": "^0.1.2",
