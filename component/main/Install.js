@@ -10,7 +10,9 @@ var fs = window.require('fs');
 var path = window.require('path');
 var osenv = window.require('osenv');
 var os = window.require('os');
+var ipc = window.require('ipc');
 var mkdirp = window.require('mkdirp');
+var _ = window.require('lodash');
 
 var Install = React.createClass({
 	displayName: 'Install',
@@ -39,7 +41,8 @@ var Install = React.createClass({
 		}
 		return {
 			presetsPath: presetsPath,
-			presetsList: this.getDirectories(presetsPath)
+			presetsList: this.getDirectories(presetsPath),
+			supportedFileTypes: ['.zip']
 		};
 	},
 
@@ -57,6 +60,11 @@ var Install = React.createClass({
 				return 0;
 			};
 
+		// Bail if we already are showing this item in the list
+		if (_.find(presetsList, function (preset) { return preset.name === item.name; }) !== undefined) {
+			return;
+		}
+
 		presetsList.push(item);
 
 		this.setState({
@@ -64,16 +72,22 @@ var Install = React.createClass({
 		});
 	},
 
-	onDrop: function (files) {
+	handleFiles: function (files) {
 		var component = this,
 			baseName;
 
 		files.forEach(function (file) {
+			// Bail if it's not a zip file
+			if (component.props.supportedFileTypes.indexOf(path.extname(file)) === -1) {
+				return;
+			}
+
+			var filePath = (typeof file === 'string') ? file : file.path;
 			// Get the name of the subdirectory that we will unzip the files to
-			baseName = path.basename(file.path, '.zip');
+			baseName = path.basename(filePath, '.zip');
 
 			var items = [],
-				reader = fs.createReadStream(file.path).pipe(unzip.Parse());
+				reader = fs.createReadStream(filePath).pipe(unzip.Parse());
 
 			reader.on('entry', function (entry) {
 				// If this is a lrtemplate file, we can copy it to the right directory
@@ -105,10 +119,19 @@ var Install = React.createClass({
 		});
 	},
 
+	onOpenClick: function () {
+		var component = this;
+
+		ipc.send('app:event', 'openFile');
+		ipc.once('app:response', function (files){
+			component.handleFiles(files);
+		});
+	},
+
 	render: function() {
 		return (
 			<div>
-		    	<Dropzone onDrop={this.onDrop} supportClick={false} style={{}}>
+		    	<Dropzone onDrop={this.handleFiles} supportClick={false} style={{}}>
 		        	<PresetItems presetsList={this.state.presetsList} presetsPath={this.props.presetsPath}/>
 
 		        	<div className="overlay">
@@ -117,7 +140,7 @@ var Install = React.createClass({
 		        		</div>
 		        	</div>
 		      	</Dropzone>
-		      	<Footer/>
+		      	<Footer selectFiles={this.onOpenClick}/>
 	      	</div>
 		);
 	}

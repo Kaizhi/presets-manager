@@ -3,13 +3,13 @@ var ipc = window.require('ipc');
 
 var Footer = React.createClass({
 	closeApp: function () {
-		ipc.send('app:event', 'close');
+		ipc.sendSync('app:eventSync', 'close');
 	},
 	render: function() {
 		return (
 	      	<footer>
 	      		<ul className="actions primary">
-	      			<li onCLick={this.props.installPreset}><span><i className="fa fa-plus"></i></span></li>
+	      			<li onClick={this.props.selectFiles}><span><i className="fa fa-plus"></i></span></li>
 	      		</ul>
 	      		<ul className="actions secondary">
 	      			<li><span><i className="fa fa-folder-open-o"></i></span></li>

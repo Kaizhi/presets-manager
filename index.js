@@ -4,6 +4,7 @@ var Menubar = require('menubar');
 var MenuItem = require('menu-item');
 var BrowserWindow = require('browser-window');
 var ipc = require('ipc');
+var dialog = require('dialog');
 
 require('crash-reporter').start();
 
@@ -13,8 +14,16 @@ app.on('window-all-closed', function() {
 	if (process.platform !== 'darwin') app.quit();
 });
 
-ipc.on('app:event', function (event, arg) {
+ipc.on('app:eventSync', function (event, arg) {
 	app.quit();
+});
+
+ipc.on('app:event', function (event, arg) {
+	if (arg === 'openFile') {
+		dialog.showOpenDialog({ properties: [ 'openFile', 'multiSelections' ]}, function (files) {
+			event.sender.send('app:response', files);
+		});
+	}
 });
 
 var mb = Menubar({
