@@ -13,7 +13,7 @@ var Footer = React.createClass({
 	      		</ul>
 	      		<ul className="actions secondary">
 	      			<li><span><i className="fa fa-folder-open-o"></i></span></li>
-	      			<li><span><i className="fa fa-refresh"></i></span></li>
+	      			<li onClick={this.props.refresh}><span><i className="fa fa-refresh"></i></span></li>
 	      			<li><span><i className="fa fa-question-circle"></i></span></li>
 	      			<li onClick={this.closeApp}><span><i className="fa fa-times"></i></span></li>
 	      		</ul>

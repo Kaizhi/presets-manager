@@ -128,9 +128,15 @@ var Install = React.createClass({
 		});
 	},
 
+	refresh: function () {
+		this.setState({
+			presetsList: this.constructor.getDirectories(this.props.presetsPath).sort() || []
+		});
+	},
+
 	render: function() {
 		return (
-			<div>
+			<div key={Date.now()}>
 		    	<Dropzone onDrop={this.handleFiles} supportClick={false} style={{}}>
 		        	<PresetItems presetsList={this.state.presetsList} presetsPath={this.props.presetsPath}/>
 
@@ -140,7 +146,7 @@ var Install = React.createClass({
 		        		</div>
 		        	</div>
 		      	</Dropzone>
-		      	<Footer selectFiles={this.onOpenClick}/>
+		      	<Footer selectFiles={this.onOpenClick} refresh={this.refresh}/>
 	      	</div>
 		);
 	}
