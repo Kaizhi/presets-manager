@@ -51,6 +51,7 @@ var PresetItem = React.createClass({
 		}
 
 		function item(item, index) {
+			item = path.basename(item, '.lrtemplate');
 			return (
 				<div key={index + item} index={index}>
 					{item}
