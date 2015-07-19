@@ -29,7 +29,7 @@ ipc.on('app:event', function (event, arg) {
 var mb = Menubar({
 	dir: __dirname,
 	preloadWindow: true,
-	width: 1024, //400
+	width: 400, //400
 	height: 600,
 	resizable: true
 });

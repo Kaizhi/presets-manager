@@ -19,7 +19,11 @@ gulp.task( 'watch-all', function () {
 	watchAndRebuild();
 } );
 
-gulp.task( 'watch-compile-build', runSequence('compile', 'build', 'watch-all') );
+gulp.task('icons', function() {
+   gulp.src('./assets/*.png').pipe(gulp.dest('./compile/'));
+});
+
+gulp.task( 'watch-compile-build', runSequence('compile', 'icons', 'build', 'watch-all') );
 
 gulp.task( 'watch-compile', [ 'build' ], watchAndRecompile );
 gulp.task( 'watch-build', [ 'build' ], watchAndRebuild );
