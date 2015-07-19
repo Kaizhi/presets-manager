@@ -28,3 +28,5 @@ node_modules
 build/*
 cache/*
 compile/*
+Presets-darwin-x64/*
+Presets-win32-x64/*
