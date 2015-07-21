@@ -30,17 +30,16 @@ var mb = Menubar({
 	dir: __dirname,
 	preloadWindow: true,
 	width: 400, //400
-	height: 600,
-	resizable: true
+	height: 400,
+	resizable: false
 });
 
 mb.on('ready', function () {
 });
 
 mb.on('after-create-window', function () {
-	mb.window.setResizable(false);
-	mb.window.openDevTools({
-		detach: false
-	});
+	// mb.window.openDevTools({
+	// 	detach: false
+	// });
 });
 
