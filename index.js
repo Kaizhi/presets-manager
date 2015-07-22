@@ -20,7 +20,12 @@ ipc.on('app:eventSync', function (event, arg) {
 
 ipc.on('app:event', function (event, arg) {
 	if (arg === 'openFile') {
-		dialog.showOpenDialog({ properties: [ 'openFile', 'multiSelections' ]}, function (files) {
+		dialog.showOpenDialog({
+			filters: [
+				{ name: 'Lightroom Presets', extensions: ['zip']}
+			],
+			properties: [ 'openFile', 'multiSelections' ]
+		}, function (files) {
 			event.sender.send('app:response', files);
 		});
 	}
